@@ -1,6 +1,6 @@
 # Arc Chart
 
-![image](./image/poster.png)
+![image](https://raw.githubusercontent.com/cksrlcks/arc_chart/main/image/poster.png)
 
 Chart.js 기반의 아크(arc) 형태 게이지 컴포넌트입니다.
 
@@ -27,28 +27,13 @@ npm install arc-chart chart.js
 <link rel="stylesheet" href="./dist/arc-chart.css" />
 
 <div class="chart-view">
-	<canvas id="mainChart"></canvas>
+	<canvas id="chart"></canvas>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="./dist/arc-chart.js"></script>
 <script>
-	const chart = new ArcChart("#mainChart", {
-		value: 0.25,
-		label: "완료율",
-		showLabel: true,
-		showPercentage: true,
-		animation: true,
-		gapDegree: 220,
-		cutout: "75%",
-		thresholds: { warning: 0.3, success: 0.8 },
-		trackColor: "#E3E7F8",
-		colors: {
-			warning: { start: "#FF8E53", end: "#FF5F1F", bar: "#FF4500" },
-			normal: { start: "#556DFF", end: "#2F4CFF", bar: "#1233FF" },
-			success: { start: "#42E695", end: "#3BB2B8", bar: "#2E8B57" },
-		},
-	});
+	const chart = new ArcChart("#chart");
 </script>
 ```
 
@@ -57,7 +42,7 @@ npm install arc-chart chart.js
 ## 사용 방법
 
 ```html
-<canvas id="mainChart"></canvas>
+<canvas id="chart"></canvas>
 ```
 
 ```js
