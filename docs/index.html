@@ -1,0 +1,318 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Arc Chart Demo</title>
+    <link rel="stylesheet" href="../dist/arc-chart.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="dashboard">
+      <div class="chart-view">
+        <canvas id="mainChart"></canvas>
+      </div>
+
+      <div class="controls">
+        <h3>Chart Options (차트 옵션)</h3>
+
+        <div class="control-group">
+          <label>
+            Value (값)
+            <span id="v_value" class="value-badge">25%</span>
+          </label>
+          <input type="range" id="p_value" min="0" max="100" value="25" />
+        </div>
+
+        <div class="control-group">
+          <label>Label Text (중앙 라벨)</label>
+          <input
+            type="text"
+            id="p_label"
+            value="완료율"
+            placeholder="차트 중앙 라벨"
+          />
+        </div>
+
+        <div class="row toggle-row">
+          <label class="toggle-item">
+            <input type="checkbox" id="p_show_label" checked />
+            <span>Show Label <br>(라벨 표시)</span>
+          </label>
+          <label class="toggle-item">
+            <input type="checkbox" id="p_show_percentage" checked />
+            <span>Show % <br>(퍼센트 표시)</span>
+          </label>
+          <label class="toggle-item">
+            <input type="checkbox" id="p_animation" checked />
+            <span>Animation <br>(애니메이션)</span>
+          </label>
+        </div>
+
+        <div class="row">
+          <div class="control-group">
+            <label>
+              Gap Degree (각도)
+              <span id="v_gap" class="value-badge">220</span>
+            </label>
+            <input type="range" id="p_gap" min="0" max="300" value="220" />
+          </div>
+          <div class="control-group">
+            <label>
+              Cutout (두께)
+              <span id="v_cutout" class="value-badge">75%</span>
+            </label>
+            <input type="range" id="p_cutout" min="30" max="90" value="75" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="control-group">
+            <label>
+              Warning Below (경고 기준)
+              <span id="v_t_warn" class="value-badge">30%</span>
+            </label>
+            <input type="range" id="p_t_warn" min="0" max="100" value="30" />
+          </div>
+          <div class="control-group">
+            <label>
+              Success Above (성공 기준)
+              <span id="v_t_succ" class="value-badge">80%</span>
+            </label>
+            <input type="range" id="p_t_succ" min="0" max="100" value="80" />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>
+            Track Color (배경 트랙)
+            <span id="v_track" class="value-badge">#E3E7F8</span>
+          </label>
+          <input type="color" id="p_track" value="#e3e7f8" />
+        </div>
+
+        <div class="row">
+          <div class="control-group">
+            <label>
+              Normal End <br>(기본 끝색)
+              <span id="v_n_start" class="value-badge">#556DFF</span>
+            </label>
+            <input type="color" id="p_n_start" value="#556dff" />
+          </div>
+          <div class="control-group">
+            <label>
+              Normal Start <br>(기본 시작색)
+              <span id="v_n_end" class="value-badge">#2F4CFF</span>
+            </label>
+            <input type="color" id="p_n_end" value="#2f4cff" />
+          </div>
+          <div class="control-group">
+            <label>
+              Normal Bar <br>(기본 바색)
+              <span id="v_n_bar" class="value-badge">#1233FF</span>
+            </label>
+            <input type="color" id="p_n_bar" value="#1233ff" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="control-group">
+            <label>
+              Warning End <br>(경고 끝색)
+              <span id="v_w_start" class="value-badge">#FF8E53</span>
+            </label>
+            <input type="color" id="p_w_start" value="#ff8e53" />
+          </div>
+          <div class="control-group">
+            <label>
+              Warning Start <br>(경고 시작색)
+              <span id="v_w_end" class="value-badge">#FF5F1F</span>
+            </label>
+            <input type="color" id="p_w_end" value="#ff5f1f" />
+          </div>
+          <div class="control-group">
+            <label>
+              Warning Bar <br>(경고 바색)
+              <span id="v_w_bar" class="value-badge">#FF4500</span>
+            </label>
+            <input type="color" id="p_w_bar" value="#ff4500" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="control-group">
+            <label>
+              Success End <br>(성공 끝색)
+              <span id="v_s_start" class="value-badge">#42E695</span>
+            </label>
+            <input type="color" id="p_s_start" value="#42e695" />
+          </div>
+          <div class="control-group">
+            <label>
+              Success Start <br>(성공 시작색)
+              <span id="v_s_end" class="value-badge">#3BB2B8</span>
+            </label>
+            <input type="color" id="p_s_end" value="#3bb2b8" />
+          </div>
+          <div class="control-group">
+            <label>
+              Success Bar <br>(성공 바색)
+              <span id="v_s_bar" class="value-badge">#2E8B57</span>
+            </label>
+            <input type="color" id="p_s_bar" value="#2e8b57" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../dist/arc-chart.js"></script>
+
+    <script>
+      const options = {
+        value: document.getElementById("p_value").value / 100,
+        label: document.getElementById("p_label").value,
+        showLabel: document.getElementById("p_show_label").checked,
+        showPercentage: document.getElementById("p_show_percentage").checked,
+        animation: document.getElementById("p_animation").checked,
+        gapDegree: parseInt(document.getElementById("p_gap").value),
+        cutout: document.getElementById("p_cutout").value + "%",
+        trackColor: document.getElementById("p_track").value,
+        thresholds: {
+          warning: document.getElementById("p_t_warn").value / 100,
+          success: document.getElementById("p_t_succ").value / 100,
+        },
+        colors: {
+          normal: {
+            start: document.getElementById("p_n_start").value,
+            end: document.getElementById("p_n_end").value,
+            bar: document.getElementById("p_n_bar").value,
+          },
+          warning: {
+            start: document.getElementById("p_w_start").value,
+            end: document.getElementById("p_w_end").value,
+            bar: document.getElementById("p_w_bar").value,
+          },
+          success: {
+            start: document.getElementById("p_s_start").value,
+            end: document.getElementById("p_s_end").value,
+            bar: document.getElementById("p_s_bar").value,
+          },
+        },
+      };
+
+      const chart = new ArcChart("#mainChart", options);
+
+      const setBadgeValue = (id, value, suffix = "") => {
+        document.getElementById(id).textContent = `${value}${suffix}`;
+      };
+
+      document.getElementById("p_value").addEventListener("input", (e) => {
+        const val = e.target.value / 100;
+        setBadgeValue("v_value", e.target.value, "%");
+        chart.updateValue(val);
+      });
+
+      document.getElementById("p_label").addEventListener("input", (e) => {
+        chart.updateOptions({ label: e.target.value });
+      });
+
+      const updateDisplayOptions = () => {
+        chart.updateOptions({
+          showLabel: document.getElementById("p_show_label").checked,
+          showPercentage: document.getElementById("p_show_percentage").checked,
+          animation: document.getElementById("p_animation").checked,
+        });
+      };
+
+      ["p_show_label", "p_show_percentage", "p_animation"].forEach((id) => {
+        document
+          .getElementById(id)
+          .addEventListener("change", updateDisplayOptions);
+      });
+
+      document.getElementById("p_gap").addEventListener("input", (e) => {
+        setBadgeValue("v_gap", e.target.value);
+        chart.updateOptions({ gapDegree: parseInt(e.target.value) });
+      });
+
+      document.getElementById("p_cutout").addEventListener("input", (e) => {
+        setBadgeValue("v_cutout", e.target.value, "%");
+        chart.updateOptions({ cutout: e.target.value + "%" });
+      });
+
+      const updateThresholds = () => {
+        const warningValue = document.getElementById("p_t_warn").value;
+        const successValue = document.getElementById("p_t_succ").value;
+        setBadgeValue("v_t_warn", warningValue, "%");
+        setBadgeValue("v_t_succ", successValue, "%");
+
+        chart.updateOptions({
+          thresholds: {
+            warning: warningValue / 100,
+            success: successValue / 100,
+          },
+        });
+      };
+
+      document
+        .getElementById("p_t_warn")
+        .addEventListener("input", updateThresholds);
+      document
+        .getElementById("p_t_succ")
+        .addEventListener("input", updateThresholds);
+
+      const setColorValue = (inputId, badgeId) => {
+        const color = document.getElementById(inputId).value;
+        document.getElementById(badgeId).textContent = color.toUpperCase();
+      };
+
+      const updateColors = () => {
+        setColorValue("p_track", "v_track");
+        setColorValue("p_n_start", "v_n_start");
+        setColorValue("p_n_end", "v_n_end");
+        setColorValue("p_n_bar", "v_n_bar");
+        setColorValue("p_w_start", "v_w_start");
+        setColorValue("p_w_end", "v_w_end");
+        setColorValue("p_w_bar", "v_w_bar");
+        setColorValue("p_s_start", "v_s_start");
+        setColorValue("p_s_end", "v_s_end");
+        setColorValue("p_s_bar", "v_s_bar");
+
+        chart.updateOptions({
+          trackColor: document.getElementById("p_track").value,
+          colors: {
+            normal: {
+              start: document.getElementById("p_n_start").value,
+              end: document.getElementById("p_n_end").value,
+              bar: document.getElementById("p_n_bar").value,
+            },
+            warning: {
+              start: document.getElementById("p_w_start").value,
+              end: document.getElementById("p_w_end").value,
+              bar: document.getElementById("p_w_bar").value,
+            },
+            success: {
+              start: document.getElementById("p_s_start").value,
+              end: document.getElementById("p_s_end").value,
+              bar: document.getElementById("p_s_bar").value,
+            },
+          },
+        });
+      };
+
+      [
+        "p_track",
+        "p_n_start",
+        "p_n_end",
+        "p_n_bar",
+        "p_w_start",
+        "p_w_end",
+        "p_w_bar",
+        "p_s_start",
+        "p_s_end",
+        "p_s_bar",
+      ].forEach((id) => {
+        document.getElementById(id).addEventListener("input", updateColors);
+      });
+    </script>
+  </body>
+</html>

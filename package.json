@@ -1,0 +1,33 @@
+{
+  "name": "arc-chart",
+  "version": "1.0.0",
+  "description": "Customizable arc-style gauge chart built on Chart.js",
+  "main": "dist/arc-chart.js",
+  "module": "dist/arc-chart.esm.js",
+  "style": "dist/arc-chart.css",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "heavybear",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.0",
+    "@rollup/plugin-babel": "^7.0.0",
+    "@rollup/plugin-commonjs": "^29.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
+    "postcss": "^8.5.8",
+    "rollup": "^4.59.0",
+    "rollup-plugin-postcss": "^4.0.2"
+  },
+  "peerDependencies": {
+    "chart.js": "^4.0.0"
+  }
+}
