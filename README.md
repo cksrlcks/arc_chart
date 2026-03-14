@@ -19,7 +19,42 @@ npm install arc-chart chart.js
 
 `chart.js`는 peer dependency입니다.
 
-## 빠른 시작
+## npm 없이 사용하기 (dist 직접 로드)
+
+`npm install`이 어려운 환경에서는 `dist` 파일을 직접 포함해서 사용할 수 있습니다.
+
+```html
+<link rel="stylesheet" href="./dist/arc-chart.css" />
+
+<div class="chart-view">
+	<canvas id="mainChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="./dist/arc-chart.js"></script>
+<script>
+	const chart = new ArcChart("#mainChart", {
+		value: 0.25,
+		label: "완료율",
+		showLabel: true,
+		showPercentage: true,
+		animation: true,
+		gapDegree: 220,
+		cutout: "75%",
+		thresholds: { warning: 0.3, success: 0.8 },
+		trackColor: "#E3E7F8",
+		colors: {
+			warning: { start: "#FF8E53", end: "#FF5F1F", bar: "#FF4500" },
+			normal: { start: "#556DFF", end: "#2F4CFF", bar: "#1233FF" },
+			success: { start: "#42E695", end: "#3BB2B8", bar: "#2E8B57" },
+		},
+	});
+</script>
+```
+
+
+
+## 사용 방법
 
 ```html
 <canvas id="mainChart"></canvas>
@@ -119,5 +154,3 @@ npm run dev
 ## 데모
 
 `docs/index.html`에 인터랙티브 데모가 포함되어 있습니다.
-
-데모는 `dist/arc-chart.js`를 사용하므로, 소스 수정 후에는 `npm run build`로 dist를 갱신해 주세요.
