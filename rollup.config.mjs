@@ -41,6 +41,7 @@ export default {
       tsconfig: "./tsconfig.json",
       declaration: true,
       declarationDir: "dist/types",
+      sourceMap: true,
     }),
     postcss({
       extract: true,
