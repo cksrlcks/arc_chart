@@ -1,0 +1,34 @@
+import "./arc-chart.css";
+import { ArcChartOptions } from "./type";
+export default class ArcChart {
+    private canvas;
+    private ctx;
+    private chart;
+    private container;
+    private wrapper;
+    private textOverlay;
+    private percentEl;
+    private value;
+    private label;
+    private showLabel;
+    private showPercentage;
+    private gapDegree;
+    private usableDegree;
+    private thresholds;
+    private cutout;
+    private trackColor;
+    private animationEnabled;
+    private animation;
+    private defaultAnimation;
+    private colors;
+    constructor(selector: string, options?: ArcChartOptions);
+    private getColors;
+    private _wrapElement;
+    private _renderOverlay;
+    private _getAnimationConfig;
+    private _updateWrapperLayout;
+    private _createGradient;
+    updateValue(newValue: number | string): void;
+    updateOptions(newOptions?: ArcChartOptions): void;
+    init(): void;
+}

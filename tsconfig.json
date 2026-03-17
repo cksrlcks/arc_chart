@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",                          // 최신 JS 문법 사용
+    "module": "ESNext",                          // Rollup이 트리쉐이킹을 할 수 있도록 ESM 유지
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],    // 브라우저 환경 및 최신 문법 지원
+    "moduleResolution": "node",                  // 노드 방식의 모듈 해석
+
+    "declaration": true,                         // .d.ts 파일 생성 (라이브러리 필수)
+    "declarationDir": "./dist/types",            // 타입 파일 저장 위치
+    "emitDeclarationOnly": false,                // JS 파일도 같이 생성 (Rollup 플러그인이 제어함)
+    "sourceMap": true,                           // 디버깅을 위한 소스맵 생성
+
+    "strict": true,                              // 모든 엄격한 체크 활성화
+    "noImplicitAny": true,                       // 암시적 any 금지
+    "strictNullChecks": true,                    // null/undefined 체크
+    "strictPropertyInitialization": true,        // 클래스 필드 초기화 체크
+    "skipLibCheck": true,                        // 외부 라이브러리(chart.js 등) 타입 체크 생략
+
+    "esModuleInterop": true,                     // CommonJS와 ESM 혼용 가능케 함
+    "allowSyntheticDefaultImports": true,        // default import 없는 라이브러리 허용
+    "forceConsistentCasingInFileNames": true,    // 파일명 대소문자 구분 강제
+    "moduleDetection": "force",
+    "isolatedModules": true,                     // 각 파일을 독립된 모듈로 처리 (번들러 최적화)
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]                           // 경로 별칭 사용 시
+    }
+  },
+  "include": ["src/**/*"],                       // src 폴더 내 모든 파일 포함
+  "exclude": ["node_modules", "dist", "example"] // 빌드에서 제외할 폴더
+}
