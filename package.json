@@ -1,6 +1,6 @@
 {
   "name": "arc-chart",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Customizable arc-style gauge chart built on Chart.js",
   "main": "dist/arc-chart.js",
   "module": "dist/arc-chart.esm.js",
