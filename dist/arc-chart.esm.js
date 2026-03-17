@@ -1,3 +1,5 @@
+
+(function(l, r) { if (!l || l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (self.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(self.document);
 import Chart from 'chart.js/auto';
 
 function _classCallCheck(a, n) {
@@ -57,54 +59,119 @@ function _toPropertyKey(t) {
   var i = _toPrimitive(t, "string");
   return "symbol" == typeof i ? i : i + "";
 }
+function _typeof(o) {
+  "@babel/helpers - typeof";
+
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return typeof o;
+  } : function (o) {
+    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+  }, _typeof(o);
+}
+
+var DEFAULT_OPTIONS = {
+  value: 0,
+  label: "",
+  showLabel: true,
+  showPercentage: true,
+  gapDegree: 220,
+  cutout: "75%",
+  trackColor: "#E3E7F8",
+  thresholds: {
+    warning: 0.3,
+    success: 0.8
+  }
+};
+var DEFAULT_COLORS = {
+  warning: {
+    start: "#FF8E53",
+    end: "#FF5F1F",
+    bar: "#FF4500"
+  },
+  normal: {
+    start: "#556DFF",
+    end: "#2F4CFF",
+    bar: "#1233FF"
+  },
+  success: {
+    start: "#42E695",
+    end: "#3BB2B8",
+    bar: "#2E8B57"
+  }
+};
 
 var ArcChart = /*#__PURE__*/function () {
   function ArcChart(selector) {
-    var _options$showLabel, _options$showPercenta, _options$gapDegree, _options$colors, _options$colors2, _options$colors3;
+    var _options$colors, _options$colors2, _options$colors3;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     _classCallCheck(this, ArcChart);
-    this.canvas = document.querySelector(selector);
-    if (!this.canvas) return;
-    this.ctx = this.canvas.getContext("2d");
-    this.value = options.value || 0;
-    this.label = options.label || "";
-    this.showLabel = (_options$showLabel = options.showLabel) !== null && _options$showLabel !== void 0 ? _options$showLabel : true;
-    this.showPercentage = (_options$showPercenta = options.showPercentage) !== null && _options$showPercenta !== void 0 ? _options$showPercenta : true;
-    this.gapDegree = (_options$gapDegree = options.gapDegree) !== null && _options$gapDegree !== void 0 ? _options$gapDegree : 220;
-    this.usableDegree = 360 - this.gapDegree;
-    this.thresholds = options.thresholds || {
-      warning: 0.3,
-      success: 0.8
-    };
-    this.cutout = options.cutout || "75%";
-    this.trackColor = options.trackColor || "#E3E7F8";
-    this.defaultAnimation = {
+    _defineProperty(this, "canvas", void 0);
+    _defineProperty(this, "ctx", void 0);
+    _defineProperty(this, "chart", null);
+    _defineProperty(this, "container", void 0);
+    _defineProperty(this, "wrapper", void 0);
+    _defineProperty(this, "textOverlay", void 0);
+    _defineProperty(this, "percentEl", null);
+    _defineProperty(this, "value", void 0);
+    _defineProperty(this, "label", void 0);
+    _defineProperty(this, "showLabel", void 0);
+    _defineProperty(this, "showPercentage", void 0);
+    _defineProperty(this, "gapDegree", void 0);
+    _defineProperty(this, "usableDegree", void 0);
+    _defineProperty(this, "thresholds", void 0);
+    _defineProperty(this, "cutout", void 0);
+    _defineProperty(this, "trackColor", void 0);
+    _defineProperty(this, "animationEnabled", void 0);
+    _defineProperty(this, "animation", void 0);
+    _defineProperty(this, "defaultAnimation", {
       duration: 1500,
       easing: "easeOutQuart"
-    };
+    });
+    _defineProperty(this, "colors", void 0);
+    var el = document.querySelector(selector);
+    if (!(el instanceof HTMLCanvasElement)) {
+      throw new Error("[ArcChart] Element with selector \"".concat(selector, "\" is not a canvas."));
+    }
+    this.canvas = el;
+    var context = this.canvas.getContext("2d");
+    if (!context) {
+      throw new Error("[ArcChart] Failed to get 2D context from the canvas.");
+    }
+    this.ctx = context;
+    // Initialize options with defaults
+    var _options$value = options.value,
+      value = _options$value === void 0 ? DEFAULT_OPTIONS.value : _options$value,
+      _options$label = options.label,
+      label = _options$label === void 0 ? DEFAULT_OPTIONS.label : _options$label,
+      _options$showLabel = options.showLabel,
+      showLabel = _options$showLabel === void 0 ? DEFAULT_OPTIONS.showLabel : _options$showLabel,
+      _options$showPercenta = options.showPercentage,
+      showPercentage = _options$showPercenta === void 0 ? DEFAULT_OPTIONS.showPercentage : _options$showPercenta,
+      _options$gapDegree = options.gapDegree,
+      gapDegree = _options$gapDegree === void 0 ? DEFAULT_OPTIONS.gapDegree : _options$gapDegree,
+      _options$cutout = options.cutout,
+      cutout = _options$cutout === void 0 ? DEFAULT_OPTIONS.cutout : _options$cutout,
+      _options$trackColor = options.trackColor,
+      trackColor = _options$trackColor === void 0 ? DEFAULT_OPTIONS.trackColor : _options$trackColor,
+      _options$thresholds = options.thresholds,
+      thresholds = _options$thresholds === void 0 ? DEFAULT_OPTIONS.thresholds : _options$thresholds;
+    this.value = value;
+    this.label = label;
+    this.showLabel = showLabel;
+    this.showPercentage = showPercentage;
+    this.gapDegree = gapDegree;
+    this.usableDegree = 360 - this.gapDegree;
+    this.cutout = cutout;
+    this.trackColor = trackColor;
+    this.thresholds = _objectSpread2(_objectSpread2({}, DEFAULT_OPTIONS.thresholds), thresholds);
+    this.cutout = options.cutout || "75%";
+    this.trackColor = options.trackColor || "#E3E7F8";
     this.animationEnabled = options.animation !== false;
-    this.animation = options.animation && options.animation !== false ? _objectSpread2(_objectSpread2({}, this.defaultAnimation), options.animation) : _objectSpread2({}, this.defaultAnimation);
-    var defaultColors = {
-      warning: {
-        start: "#FF8E53",
-        end: "#FF5F1F",
-        bar: "#FF4500"
-      },
-      normal: {
-        start: "#556DFF",
-        end: "#2F4CFF",
-        bar: "#1233FF"
-      },
-      success: {
-        start: "#42E695",
-        end: "#3BB2B8",
-        bar: "#2E8B57"
-      }
-    };
+    this.animation = _typeof(options.animation) === "object" ? _objectSpread2(_objectSpread2({}, this.defaultAnimation), options.animation) : _objectSpread2({}, this.defaultAnimation);
     this.colors = {
-      warning: _objectSpread2(_objectSpread2({}, defaultColors.warning), (_options$colors = options.colors) === null || _options$colors === void 0 ? void 0 : _options$colors.warning),
-      normal: _objectSpread2(_objectSpread2({}, defaultColors.normal), (_options$colors2 = options.colors) === null || _options$colors2 === void 0 ? void 0 : _options$colors2.normal),
-      success: _objectSpread2(_objectSpread2({}, defaultColors.success), (_options$colors3 = options.colors) === null || _options$colors3 === void 0 ? void 0 : _options$colors3.success)
+      warning: _objectSpread2(_objectSpread2({}, DEFAULT_COLORS.warning), (_options$colors = options.colors) === null || _options$colors === void 0 ? void 0 : _options$colors.warning),
+      normal: _objectSpread2(_objectSpread2({}, DEFAULT_COLORS.normal), (_options$colors2 = options.colors) === null || _options$colors2 === void 0 ? void 0 : _options$colors2.normal),
+      success: _objectSpread2(_objectSpread2({}, DEFAULT_COLORS.success), (_options$colors3 = options.colors) === null || _options$colors3 === void 0 ? void 0 : _options$colors3.success)
     };
     this.chart = null;
     this._wrapElement();
@@ -113,9 +180,9 @@ var ArcChart = /*#__PURE__*/function () {
   return _createClass(ArcChart, [{
     key: "getColors",
     value: function getColors(value) {
-      var status = "normal";
-      if (value < this.thresholds.warning) status = "warning";else if (value >= this.thresholds.success) status = "success";
-      return this.colors[status];
+      if (value < this.thresholds.warning) return this.colors.warning;
+      if (value >= this.thresholds.success) return this.colors.success;
+      return this.colors.normal;
     }
   }, {
     key: "_wrapElement",
@@ -139,12 +206,13 @@ var ArcChart = /*#__PURE__*/function () {
       textOverlay.className = "chart-overlay";
       this.textOverlay = textOverlay;
       this._renderOverlay();
-      this.canvas.parentNode.insertBefore(this.container, this.canvas);
-      this.container.appendChild(this.wrapper);
-      this.container.appendChild(textOverlay);
-      this.wrapper.appendChild(this.canvas);
-      this.percentEl = textOverlay.querySelector(".chart-value");
-      this.labelEl = textOverlay.querySelector(".chart-label");
+      if (this.canvas.parentNode) {
+        this.canvas.parentNode.insertBefore(this.container, this.canvas);
+        this.container.appendChild(this.wrapper);
+        this.container.appendChild(textOverlay);
+        this.wrapper.appendChild(this.canvas);
+        this.percentEl = textOverlay.querySelector(".chart-value");
+      }
     }
   }, {
     key: "_renderOverlay",
@@ -159,7 +227,6 @@ var ArcChart = /*#__PURE__*/function () {
       }
       this.textOverlay.innerHTML = html;
       this.percentEl = this.textOverlay.querySelector(".chart-value");
-      this.labelEl = this.textOverlay.querySelector(".chart-label");
     }
   }, {
     key: "_getAnimationConfig",
@@ -197,12 +264,13 @@ var ArcChart = /*#__PURE__*/function () {
   }, {
     key: "updateValue",
     value: function updateValue(newValue) {
-      this.value = parseFloat(newValue);
+      this.value = typeof newValue === "string" ? parseFloat(newValue) : newValue;
       if (!this.chart) return;
-      this.chart.data.datasets[0].data[1] = this.value * this.usableDegree;
-      this.chart.data.datasets[0].data[2] = (1 - this.value) * this.usableDegree;
+      var dataset = this.chart.data.datasets[0];
+      dataset.data[1] = this.value * this.usableDegree;
+      dataset.data[2] = (1 - this.value) * this.usableDegree;
       var colors = this.getColors(this.value);
-      this.chart.data.datasets[0].backgroundColor[1] = this._createGradient(colors);
+      dataset.backgroundColor = ["transparent", this._createGradient(colors), this.trackColor];
       if (this.percentEl) {
         this.percentEl.innerHTML = "".concat(Math.floor(this.value * 100), "<span class=\"unit\">%</span>");
       }
@@ -212,40 +280,50 @@ var ArcChart = /*#__PURE__*/function () {
     key: "updateOptions",
     value: function updateOptions() {
       var newOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      if (!this.chart) return;
+      var doughnutOptions = this.chart.options;
+      if (!doughnutOptions) return;
+      // 라벨 및 표시 설정 업데이트
       if (newOptions.label !== undefined) this.label = newOptions.label;
       if (newOptions.showLabel !== undefined) this.showLabel = newOptions.showLabel;
       if (newOptions.showPercentage !== undefined) {
         this.showPercentage = newOptions.showPercentage;
       }
+      // 애니메이션 설정 업데이트
       if (newOptions.animation !== undefined) {
         this.animationEnabled = newOptions.animation !== false;
-        if (newOptions.animation && newOptions.animation !== true) {
+        if (_typeof(newOptions.animation) === "object") {
           this.animation = _objectSpread2(_objectSpread2({}, this.defaultAnimation), newOptions.animation);
         }
-        this.chart.options.animation = this._getAnimationConfig();
+        doughnutOptions.animation = this._getAnimationConfig();
       }
+      // 각도 업데이트
       if (newOptions.gapDegree !== undefined) {
         this.gapDegree = newOptions.gapDegree;
         this.usableDegree = 360 - this.gapDegree;
         if (this.container) {
-          if (this.gapDegree <= 160) {
-            this.container.classList.add("centered-label");
-          } else {
-            this.container.classList.remove("centered-label");
-          }
+          this.container.classList.toggle("centered-label", this.gapDegree <= 160);
         }
         this._updateWrapperLayout();
-        this.chart.options.rotation = 180 - this.gapDegree / 2;
-        this.chart.data.datasets[0].data[0] = this.gapDegree;
-        this.chart.data.datasets[0].data[2] = (1 - this.value) * this.usableDegree;
+        if (this.chart) {
+          if (doughnutOptions) {
+            doughnutOptions.rotation = 180 - this.gapDegree / 2;
+            this.chart.data.datasets[0].data[0] = this.gapDegree;
+            this.chart.data.datasets[0].data[2] = (1 - this.value) * this.usableDegree;
+          }
+        }
       }
-      if (newOptions.cutout !== undefined) {
-        this.chart.options.cutout = newOptions.cutout;
+      // 컷아웃 업데이트
+      if (newOptions.cutout !== undefined && this.chart) {
+        doughnutOptions.cutout = newOptions.cutout;
       }
+      // 트랙 색상 업데이트
       if (newOptions.trackColor !== undefined) {
         this.trackColor = newOptions.trackColor;
-        this.chart.data.datasets[0].backgroundColor[2] = this.trackColor;
+        var bgColors = this.chart.data.datasets[0];
+        bgColors[2] = this.trackColor;
       }
+      // 색상 업데이트
       if (newOptions.colors) {
         this.colors = {
           warning: _objectSpread2(_objectSpread2({}, this.colors.warning), newOptions.colors.warning),
@@ -253,6 +331,7 @@ var ArcChart = /*#__PURE__*/function () {
           success: _objectSpread2(_objectSpread2({}, this.colors.success), newOptions.colors.success)
         };
       }
+      // 임계값 업데이트
       if (newOptions.thresholds) {
         this.thresholds = _objectSpread2(_objectSpread2({}, this.thresholds), newOptions.thresholds);
       }
@@ -274,7 +353,7 @@ var ArcChart = /*#__PURE__*/function () {
         afterDatasetsDraw: function afterDatasetsDraw(chart) {
           var meta = chart.getDatasetMeta(0);
           var arc = meta.data[1];
-          if (!arc || arc.hidden || _this.value <= 0) return;
+          if (!arc || arc.x === undefined || _this.value <= 0) return;
           var x = arc.x,
             y = arc.y,
             outerRadius = arc.outerRadius,
@@ -308,9 +387,8 @@ var ArcChart = /*#__PURE__*/function () {
         },
         options: {
           responsive: true,
-          hover: {
-            mode: null
-          },
+          events: [],
+          hover: undefined,
           cutout: this.cutout,
           rotation: rotationDeg,
           animation: this._getAnimationConfig(),
@@ -325,7 +403,11 @@ var ArcChart = /*#__PURE__*/function () {
       this.chart = new Chart(this.canvas, config);
       setTimeout(function () {
         if (_this.chart) {
-          _this.chart.data.datasets[0].backgroundColor[1] = _this._createGradient(colors);
+          var dataset = _this.chart.data.datasets[0];
+          if (dataset && Array.isArray(dataset.backgroundColor)) {
+            var bgColors = dataset.backgroundColor;
+            bgColors[1] = _this._createGradient(colors);
+          }
           _this.chart.data.datasets[0].data[1] = _this.value * _this.usableDegree;
           _this.chart.data.datasets[0].data[2] = (1 - _this.value) * _this.usableDegree;
           _this.chart.update();
@@ -336,3 +418,4 @@ var ArcChart = /*#__PURE__*/function () {
 }();
 
 export { ArcChart as default };
+//# sourceMappingURL=arc-chart.esm.js.map
