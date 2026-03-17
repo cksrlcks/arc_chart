@@ -15,6 +15,11 @@
     "prepublishOnly": "npm run build"
   },
   "author": "heavybear",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cksrlcks/arc_chart"
+  },
+  "homepage": "https://cksrlcks.github.io/arc_chart/",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.29.0",
