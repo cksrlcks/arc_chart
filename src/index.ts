@@ -142,13 +142,15 @@ export default class ArcChart {
     if (!this.textOverlay) return;
 
     let html = "";
+    
+    if (this.showPercentage) {
+      html += `<div class="chart-value">${Math.floor(this.value * 100)}<span class="unit">%</span></div>`;
+    }
+
     if (this.showLabel && this.label) {
       html += `<div class="chart-label">${this.label}</div>`;
     }
 
-    if (this.showPercentage) {
-      html += `<div class="chart-value">${Math.floor(this.value * 100)}<span class="unit">%</span></div>`;
-    }
 
     this.textOverlay.innerHTML = html;
     this.percentEl = this.textOverlay.querySelector(".chart-value");

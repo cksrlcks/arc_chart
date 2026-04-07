@@ -1,3 +1,5 @@
+
+(function(l, r) { if (!l || l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (self.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(self.document);
 import Chart from 'chart.js/auto';
 
 function _classCallCheck(a, n) {
@@ -217,11 +219,11 @@ var ArcChart = /*#__PURE__*/function () {
     value: function _renderOverlay() {
       if (!this.textOverlay) return;
       var html = "";
-      if (this.showLabel && this.label) {
-        html += "<div class=\"chart-label\">".concat(this.label, "</div>");
-      }
       if (this.showPercentage) {
         html += "<div class=\"chart-value\">".concat(Math.floor(this.value * 100), "<span class=\"unit\">%</span></div>");
+      }
+      if (this.showLabel && this.label) {
+        html += "<div class=\"chart-label\">".concat(this.label, "</div>");
       }
       this.textOverlay.innerHTML = html;
       this.percentEl = this.textOverlay.querySelector(".chart-value");
@@ -416,3 +418,4 @@ var ArcChart = /*#__PURE__*/function () {
 }();
 
 export { ArcChart as default };
+//# sourceMappingURL=arc-chart.esm.js.map
